@@ -35,6 +35,27 @@ app.get('/consulta-dados', (request, response) => {
   });
 });
 
+
+app.get('/consulta-fornecedores', (request, response) => {
+  pool.getConnection((err, connection) => {
+    if (err) {
+      return response.status(500).json({ error: err.message });
+    }
+
+    connection.query('SELECT * FROM Fornecedores', (error, results) => {
+      connection.release(); 
+
+      if (error) {
+        return response.status(500).json({ error: error.message });
+      }
+      response.json(results);
+    });
+  });
+});
+
+
+
+
 app.use('/', appRoutes);
 
 app.listen(port, () => {
